@@ -125,7 +125,7 @@ a{ color:var(--accent); text-underline-offset:2px; text-decoration-thickness:1px
 
 /* ---------- hero ---------- */
 .hero{
-  display:grid; grid-template-columns:1fr 196px; gap:40px; align-items:start;
+  display:grid; grid-template-columns:1fr 250px; gap:44px; align-items:start;
   padding:64px 0 8px; position:relative; z-index:1;
 }
 .portrait{
@@ -150,13 +150,18 @@ a{ color:var(--accent); text-underline-offset:2px; text-decoration-thickness:1px
 }
 .project:first-of-type{ border-top:0; padding-top:6px; }
 
+/* clickable figure wrapper */
+.fig-link{ display:block; text-decoration:none; border-radius:4px; }
+.fig-link:focus-visible .fig{ outline:2px solid var(--accent); outline-offset:3px; }
+
 .fig{
   position:relative; background:var(--surface); border:1px solid var(--rule);
-  border-radius:4px; aspect-ratio:4/3; display:grid; place-items:center;
+  border-radius:4px; aspect-ratio:1/1; display:grid; place-items:center;
   color:var(--ink-faint); font-size:12.5px; text-align:center; padding:14px;
   overflow:hidden;
   transition: transform .4s cubic-bezier(.4,0,.2,1), box-shadow .4s, border-color .3s;
 }
+.fig-link .fig{ cursor:pointer; }
 /* faint dot-grid so empty placeholders still read as "grains" */
 .fig::before{
   content:""; position:absolute; inset:0;
@@ -168,6 +173,17 @@ a{ color:var(--accent); text-underline-offset:2px; text-decoration-thickness:1px
   transform:translateY(-3px); border-color:var(--accent-2);
   box-shadow:0 2px 4px rgba(0,0,0,.04), 0 14px 32px rgba(26,29,33,.09);
 }
+/* "view" overlay on hover */
+.fig-link .fig::after{
+  content:attr(data-cue);
+  position:absolute; left:0; right:0; bottom:0; z-index:3;
+  padding:8px 11px; font-size:12px; font-weight:500; text-align:left;
+  color:#fff; background:rgba(26,29,33,.78);
+  opacity:0; transform:translateY(100%);
+  transition: opacity .3s ease, transform .3s cubic-bezier(.4,0,.2,1);
+}
+.fig-link:hover .fig::after,
+.fig-link:focus-visible .fig::after{ opacity:1; transform:translateY(0); }
 
 .project-body p{ color:var(--ink-soft); font-size:15.5px; margin:0 0 11px; }
 .project-body p strong{ color:var(--ink); font-weight:500; }
@@ -209,17 +225,9 @@ ol.pubs li::before{
   margin-left:7px; vertical-align:2px;
 }
 .pub-links{ font-size:14px; margin-top:7px; display:flex; gap:8px; flex-wrap:wrap; }
-
-/* ---------- contact ---------- */
-.contact-grid{ display:grid; gap:8px; font-size:15.5px; }
-.contact-grid > div{ display:flex; gap:4px; flex-wrap:wrap; }
-.contact-grid span{ color:var(--ink-faint); display:inline-block; min-width:80px; }
-
-footer{
-  max-width:880px; margin:0 auto;
-  padding:30px 24px calc(30px + env(safe-area-inset-bottom,0px));
-  border-top:1px solid var(--rule); color:var(--ink-faint); font-size:13.5px;
-}
+.cofirst{ font-size:.72em; vertical-align:super; color:var(--accent-2); font-weight:700; }
+.pubs-note{ font-size:13px; color:var(--ink-faint); margin:14px 0 0; padding-left:4px; }
+.pubs-note .cofirst{ color:var(--ink-faint); }
 
 /* ---------- outreach ---------- */
 .outreach-lede{ color:var(--ink-soft); font-size:16px; max-width:62ch; }
@@ -241,6 +249,19 @@ footer{
   background-size:14px 14px; opacity:.55; pointer-events:none;
 }
 .out-fig img{ position:relative; width:100%; height:100%; object-fit:cover; z-index:1; }
+.out-link{ display:block; text-decoration:none; border-radius:4px; }
+.out-link .out-fig{ cursor:pointer; }
+.out-link:focus-visible .out-fig{ outline:2px solid var(--accent); outline-offset:3px; }
+.out-link .out-fig::after{
+  content:attr(data-cue);
+  position:absolute; left:0; right:0; bottom:0; z-index:3;
+  padding:7px 10px; font-size:11.5px; font-weight:500; text-align:left;
+  color:#fff; background:rgba(26,29,33,.78);
+  opacity:0; transform:translateY(100%);
+  transition: opacity .3s ease, transform .3s cubic-bezier(.4,0,.2,1);
+}
+.out-link:hover .out-fig::after,
+.out-link:focus-visible .out-fig::after{ opacity:1; transform:translateY(0); }
 .out-card:hover .out-fig{
   transform:translateY(-3px); border-color:var(--warm);
   box-shadow:0 2px 4px rgba(0,0,0,.04), 0 12px 28px rgba(26,29,33,.09);
@@ -248,9 +269,19 @@ footer{
 @media (max-width:760px){ .out-grid{ grid-template-columns:repeat(2,1fr); } }
 @media (max-width:520px){ .out-grid{ grid-template-columns:1fr; } }
 
+/* ---------- contact ---------- */
+.contact-grid{ display:grid; gap:8px; font-size:15.5px; }
+.contact-grid > div{ display:flex; gap:4px; flex-wrap:wrap; }
+.contact-grid span{ color:var(--ink-faint); display:inline-block; min-width:80px; }
+
+footer{
+  max-width:880px; margin:0 auto;
+  padding:30px 24px calc(30px + env(safe-area-inset-bottom,0px));
+  border-top:1px solid var(--rule); color:var(--ink-faint); font-size:13.5px;
+}
+
 /* ============================================================
-   SCROLL REVEAL  (content is visible by default; only animates
-   when JS has added .js to <html>)
+   SCROLL REVEAL
    ============================================================ */
 .js .reveal{ opacity:0; transform:translateY(14px); }
 .js .reveal.in{
@@ -259,6 +290,8 @@ footer{
 }
 @media (prefers-reduced-motion: reduce){
   .js .reveal{ opacity:1; transform:none; }
+  .fig-link .fig::after,
+  .out-link .out-fig::after{ transition:none; }
 }
 
 @media (max-width:560px){
@@ -288,29 +321,28 @@ footer{
 
 <main>
 
-  <div class="hero-wrap">
-    <div class="hero">
-      <div>
-        <h1>Louison Thorens</h1>
-        <p class="subtitle">
-          Postdoctoral researcher · Liao Lab, Department of Physics and Institute for
-          Mechanobiology, Northeastern University
-        </p>
-        <p class="lede">
-          I am an experimental soft matter and biophysicist working on cytoskeleton mechanics, neuron branching, complex fluid, granular media, flow in
-          porous media.
-        </p>
-        <p>
-          My work resolves individual elements — grain contacts, single molecules, single
-          filaments — in systems usually described by averages, and asks what the average
-          leaves out. Across granular columns, polymer solutions and neuronal arbours, the
-          answer has repeatedly involved history and anisotropy.
-        </p>
-      </div>
-      <div class="portrait">
-        <img src="portrait.png " alt="Louison Thorens">
-        <!-- portrait.jpg -->
-      </div>
+  <div class="hero">
+    <div>
+      <h1>Louison Thorens</h1>
+      <p class="subtitle">
+        Postdoctoral fellow,<br>
+        Liao Lab, Department of Physics and Institute for
+        Mechanobiology, Northeastern University
+      </p>
+      <p class="lede">
+        I am an experimental soft matter physicist and biophysicist, resolving the dynamics
+        of individual elements to bridge scales and describe macroscale mechanisms &mdash;
+        from soft matter to living organisms.
+      </p>
+      <p class="keywords">
+        Cytoskeletal mechanics &middot; neuronal branching &middot; complex fluids &middot;
+        granular media &middot; flow in porous media &middot; <em>in vivo</em> imaging
+        &middot; soft matter experiments &middot; microfluidics &middot; simulation
+        &middot; modelling
+      </p>
+    </div>
+    <div class="portrait">
+      <img src="portrait.png" alt="Louison Thorens">
     </div>
   </div>
 
@@ -319,52 +351,62 @@ footer{
     <h2>Work</h2>
     <hr class="rule">
 
+    <!-- ---------- microtubules ---------- -->
     <div class="project reveal">
-      <div class="fig">
-        <!-- <img src="microtubules.jpg" alt="Microtubules in a Drosophila sensory neuron"> -->
-        microtubules.jpg
-      </div>
+      <a class="fig-link" href="https://doi.org/10.64898/2026.09.28.755114" target="_blank" rel="noopener">
+        <div class="fig" data-cue="Read the preprint →">
+          <img src="MT.jpg" alt="Microtubules in a Drosophila sensory neuron">
+          <!-- microtubules.png -->
+        </div>
+      </a>
       <div class="project-body">
-        <p class="kicker">Mechanobiology · Current position, Northeastern</p>
+        <p class="kicker">Mechanobiology · Northeastern University</p>
         <h3>Cell geometry shapes the cytoskeleton</h3>
         <p>
-          Using live imaging, deep-learning analysis and genetics in <em>Drosophila</em>
-          sensory neurons, I showed that microtubule length and density follow local branch
-          geometry. The textbook expectation is that the cytoskeleton shapes the cell;
-          <strong>on short timescales, the cell shapes the cytoskeleton.</strong>
+          Using live imaging, deep-learning analysis and physical model in <em>Drosophila</em>
+          sensory neurons, we showed that microtubule dynamics is constrained by dendrites, and their length and density follow local
+          branch geometry.<strong>On short timescales, the cell shapes the cytoskeleton.</strong>
         </p>
         <div class="project-links">
-          <a class="pill" href="https://doi.org/10.64898/2026.09.28.755114">Preprint</a>
+          <a class="pill" href="https://doi.org/10.64898/2026.09.28.755114" target="_blank" rel="noopener">bioRxiv 2026</a>
         </div>
       </div>
     </div>
-<div class="project reveal">
-      <div class="fig">
-        <!-- <img src="dna.jpg" alt="Single DNA molecule in a microfluidic cross-slot"> -->
-        dna.jpg
-      </div>
+
+    <!-- ---------- DNA in flow ---------- -->
+    <div class="project reveal">
+      <a class="fig-link" href="https://arxiv.org/abs/2609.04538" target="_blank" rel="noopener">
+        <div class="fig" data-cue="Read the preprint →">
+          <img src="DNA.gif" alt="Single DNA molecule stretching in a microfluidic cross-slot">
+          <!-- dna.png -->
+        </div>
+      </a>
       <div class="project-body">
-        <p class="kicker">Complex fluids · Postdoc, Tufts University</p>
+        <p class="kicker">Complex fluids · Tufts University</p>
         <h3>Single-molecule conformation in viscoelastic flow</h3>
         <p>
-          Bulk constitutive models predict viscoelastic flows poorly because they average
-          over molecular conformation. Rather than infer it, I measured it — designing
-          microfluidic devices to track individual DNA molecules at high resolution.
-          <strong>Each molecule’s deformation history, rather than the flow it currently
-          occupies, governs the response.</strong>
-        </p>
+  Polymers in flow unravel from coils, and identical chains follow strikingly different
+  paths through that transition. Tracking individual DNA molecules in microfluidic
+  viscoelastic flows, <strong>we find that a molecule's conformation depends on the
+  deformation it has accumulated along its path, not only on the flow it currently
+  occupies.</strong> Relaxation is anisotropic: chains unfold slowly along their length
+  but relax much faster across it.
+</p>
         <div class="project-links">
-          <a class="pill" href="https://arxiv.org/abs/2609.04538">Preprint</a>
+          <a class="pill" href="https://arxiv.org/abs/2609.04538" target="_blank" rel="noopener">arXiv 2026</a>
         </div>
       </div>
     </div>
-<div class="project reveal">
-      <div class="fig">
-        <!-- <img src="bulldozing.jpg" alt="Capillary bulldozing in a tube"> -->
-        bulldozing.jpg
-      </div>
+
+    <!-- ---------- capillary bulldozing ---------- -->
+    <div class="project reveal">
+      <a class="fig-link" href="https://doi.org/10.1039/d3sm00717k" target="_blank" rel="noopener">
+        <div class="fig" data-cue="Soft Matter cover →">
+          <img src="cover_capillary.png" alt="Soft Matter cover: capillary bulldozing during slow drainage">
+        </div>
+      </a>
       <div class="project-body">
-        <p class="kicker">Porous media flow · PhD</p>
+        <p class="kicker">Porous media flow · PoreLab, University of Oslo</p>
         <h3>Capillary bulldozing during slow drainage</h3>
         <p>
           When a liquid–air interface recedes through an immersed granular bed, it
@@ -373,29 +415,31 @@ footer{
           inter-grain friction and surface tension that sets its onset.</strong>
         </p>
         <div class="project-links">
-          <a class="pill" href="https://doi.org/10.1039/d3sm00717k">Soft Matter 2023</a>
+          <a class="pill" href="https://doi.org/10.1039/d3sm00717k" target="_blank" rel="noopener">Soft Matter 2023</a>
         </div>
       </div>
     </div>
-<div class="project reveal">
-      <div class="fig">
-        <!-- <img src="janssen.jpg" alt="Magnetic Janssen effect experiment"> -->
-        janssen.jpg
-      </div>
+
+    <!-- ---------- magnetic Janssen ---------- -->
+    <div class="project reveal">
+      <a class="fig-link" href="https://doi.org/10.1039/d6sm00069j" target="_blank" rel="noopener">
+        <div class="fig" data-cue="Soft Matter cover →">
+          <img src="cover_janssen.png" alt="Soft Matter cover: hybrid magnetic Janssen effect">
+        </div>
+      </a>
       <div class="project-body">
-        <p class="kicker">Granular matter · PhD, ENS Lyon &amp; PoreLab</p>
-        <h3>Controlling force transmission in granular columns</h3>
+        <p class="kicker">Granular matter · ENS de Lyon &amp; PoreLab</p>
+        <h3>Magnetic Janssen effect</h3>
         <p>
           Grains in a container do not behave like a liquid: wall friction diverts the
           weight sideways and the apparent mass saturates. <strong>I showed that this
           redistribution can be controlled from outside</strong>, using ferromagnetic grains
           in an applied field to generate a radial wall force whose magnitude and sign are
-          set by the field — tuning a column’s apparent mass continuously, with experiment,
-          theory and discrete element simulation agreeing with no adjustable parameters.
+          set by the field.
         </p>
         <div class="project-links">
-          <a class="pill" href="https://doi.org/10.1038/s41467-021-22722-y">Nat. Commun. 2021</a>
-          <a class="pill" href="https://doi.org/10.1039/d6sm00069j">Soft Matter 2026</a>
+          <a class="pill" href="https://doi.org/10.1038/s41467-021-22722-y" target="_blank" rel="noopener">Nat. Commun. 2021</a>
+          <a class="pill" href="https://doi.org/10.1039/d6sm00069j" target="_blank" rel="noopener">Soft Matter 2026</a>
         </div>
       </div>
     </div>
@@ -408,46 +452,106 @@ footer{
     <hr class="rule">
 
     <ol class="pubs reveal">
+
+      <li>
+        <span class="pub-title">Dendritic morphology constrains microtubule dynamics and
+          organization <span class="tag">In revision · PNAS</span></span>
+        <span class="pub-authors">D. You<span class="cofirst">*</span>,
+          <b>L. Thorens</b><span class="cofirst">*</span>, Z. Xu, Y. Fu, N. Wang,
+          T. J. Mitchison, M. Liao</span>
+        <span class="pub-venue"><em>bioRxiv</em> (2026)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.64898/2026.09.28.755114" target="_blank" rel="noopener">Preprint</a></div>
+      </li>
+
+      <li>
+        <span class="pub-title">Lagrangian dynamics unveil polymer conformation in
+          viscoelastic flows <span class="tag">Submitted</span></span>
+        <span class="pub-authors"><b>L. Thorens</b>, G. Juarez, J. S. Guasto,
+          P. E. Arratia</span>
+        <span class="pub-venue"><em>arXiv</em>:2609.04538 (2026)</span>
+        <div class="pub-links"><a class="pill" href="https://arxiv.org/abs/2609.04538" target="_blank" rel="noopener">Preprint</a></div>
+      </li>
+
+      <li>
+        <span class="pub-title">Lagrangian evaluation of polymeric stress in viscoelastic
+          fluids <span class="tag">Preprint</span></span>
+        <span class="pub-authors">M. Majidi, R. Gandhi, <b>L. Thorens</b>, M. Teimouri,
+          J. S. Guasto, A. M. Ardekani</span>
+        <span class="pub-venue"><em>arXiv</em>:2607.01380 (2026)</span>
+        <div class="pub-links"><a class="pill" href="https://arxiv.org/abs/2607.01380" target="_blank" rel="noopener">Preprint</a></div>
+      </li>
+
       <li>
         <span class="pub-title">Hybrid magnetic Janssen effect arising from percolating
           ferromagnetic grain networks</span>
         <span class="pub-authors"><b>L. Thorens</b>, S. Rodriguez, N. Taberlet, M. Bourgoin,
-          K. J. Måløy, S. Santucci</span>
-        <span class="pub-venue"><em>Soft Matter</em> <b>22</b>, 4463–4469 (2026)</span>
-        <div class="pub-links"><a class="pill" href="https://doi.org/10.1039/d6sm00069j">DOI</a></div>
+          K. J. M&aring;l&oslash;y, S. Santucci</span>
+        <span class="pub-venue"><em>Soft Matter</em> <b>22</b>, 4463&ndash;4469 (2026)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1039/d6sm00069j" target="_blank" rel="noopener">DOI</a></div>
       </li>
+
       <li>
-        <span class="pub-title">Cell morphology constrains microtubule dynamics in branched
-          sensory neurons <span class="tag">In revision · PNAS</span></span>
-        <span class="pub-authors"><b>L. Thorens</b> et al.</span>
+        <span class="pub-title">Type I interferon primes the alveolar epithelium to receive
+          reparative signals from tissue-resident macrophages <span class="tag">Preprint</span></span>
+        <span class="pub-authors">A. Y. Baez Vazquez, D. A. Hoagland, A. O. Mann, Y. Lin,
+          S. M. Dang, M. Hauptschein, <b>L. Thorens</b>, <em>et al.</em></span>
         <span class="pub-venue"><em>bioRxiv</em> (2026)</span>
-        <div class="pub-links"><a class="pill" href="https://doi.org/10.64898/2026.09.28.755114">Preprint</a></div>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.64898/2026.06.10.731366" target="_blank" rel="noopener">Preprint</a></div>
       </li>
+
       <li>
-        <span class="pub-title">Lagrangian conformational dynamics of individual DNA
-          molecules in microfluidic viscoelastic flows <span class="tag">Submitted</span></span>
-        <span class="pub-authors"><b>L. Thorens</b> et al.</span>
-        <span class="pub-venue"><em>arXiv</em>:2609.04538 (2026)</span>
-        <div class="pub-links"><a class="pill" href="https://arxiv.org/abs/2609.04538">Preprint</a></div>
+        <span class="pub-title">Macrophage-derived oncostatin M repairs the lung epithelial
+          barrier during inflammatory damage</span>
+        <span class="pub-authors">D. A. Hoagland, P. Rodr&iacute;guez-Morales, A. O. Mann,
+          A. Y. Baez Vazquez, S. Yu, A. Lai, H. Kane, S. M. Dang, Y. Lin,
+          <b>L. Thorens</b>, <em>et al.</em></span>
+        <span class="pub-venue"><em>Science</em> <b>389</b>, 169&ndash;175 (2025)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1126/science.adi8828" target="_blank" rel="noopener">DOI</a></div>
       </li>
+
       <li>
         <span class="pub-title">Capillary washboarding during slow drainage of a frictional
           fluid</span>
-        <span class="pub-authors"><b>L. Thorens</b>, K. J. Måløy, E. G. Flekkøy, B. Sandnes,
-          M. Bourgoin, S. Santucci</span>
-        <span class="pub-venue"><em>Soft Matter</em> <b>19</b>, 9369–9378 (2023)</span>
-        <div class="pub-links"><a class="pill" href="https://doi.org/10.1039/d3sm00717k">DOI</a></div>
+        <span class="pub-authors"><b>L. Thorens</b>, K. J. M&aring;l&oslash;y, E. G. Flekk&oslash;y,
+          B. Sandnes, M. Bourgoin, S. Santucci</span>
+        <span class="pub-venue"><em>Soft Matter</em> <b>19</b>, 9369&ndash;9378 (2023)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1039/d3sm00717k" target="_blank" rel="noopener">DOI</a></div>
       </li>
+
       <li>
         <span class="pub-title">Magnetic Janssen effect</span>
-        <span class="pub-authors"><b>L. Thorens</b>, K. J. Måløy, M. Bourgoin, S. Santucci</span>
-        <span class="pub-venue"><em>Nature Communications</em> <b>12</b> (2021)</span>
-        <div class="pub-links"><a class="pill" href="https://doi.org/10.1038/s41467-021-22722-y">DOI</a></div>
+        <span class="pub-authors"><b>L. Thorens</b>, K. J. M&aring;l&oslash;y, M. Bourgoin,
+          S. Santucci</span>
+        <span class="pub-venue"><em>Nature Communications</em> <b>12</b>, 2486 (2021)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1038/s41467-021-22722-y" target="_blank" rel="noopener">DOI</a></div>
       </li>
 
-      <!-- TODO: Science co-authorship, and the two Powders & Grains proceedings papers. -->
+      <li>
+        <span class="pub-title">Discharge of a 2D magnetic silo</span>
+        <span class="pub-authors"><b>L. Thorens</b>, M. Viallet, K. J. M&aring;l&oslash;y,
+          M. Bourgoin, S. Santucci</span>
+        <span class="pub-venue"><em>EPJ Web of Conferences</em> <b>249</b>, 03017 (2021)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1051/epjconf/202124903017" target="_blank" rel="noopener">DOI</a></div>
+      </li>
+
+      <li>
+        <span class="pub-title">Taming the Janssen effect</span>
+        <span class="pub-authors"><b>L. Thorens</b>, K. J. M&aring;l&oslash;y, M. Bourgoin,
+          S. Santucci</span>
+        <span class="pub-venue"><em>EPJ Web of Conferences</em> <b>249</b>, 08004 (2021)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1051/epjconf/202124908004" target="_blank" rel="noopener">DOI</a></div>
+      </li>
+
+      <li>
+        <span class="pub-title">Unstable drainage of frictional fluids and magnetic control
+          of the mechanical behaviour of confined granular media
+          <span class="tag">PhD thesis</span></span>
+        <span class="pub-authors"><b>L. Thorens</b></span>
+        <span class="pub-venue">Universit&eacute; de Lyon &amp; Universitetet i Oslo (2021)</span>
+      </li>
 
     </ol>
+    <p class="pubs-note"><span class="cofirst">*</span> These authors contributed equally.</p>
   </section>
 
   <!-- =========================================================== -->
@@ -455,46 +559,43 @@ footer{
     <h2>Outreach</h2>
     <hr class="rule">
 
-    <!-- <p class="outreach-lede">
-      Granular matter is unusually easy to show and unusually hard to explain, which makes
-      it good material for a general audience. I talk about it whenever I get the chance.
-    </p> -->
-
     <div class="out-grid reveal">
 
       <div class="out-card">
         <div class="out-fig">
-          <img src="museum.jpg" alt="Talk at the Museum of Science, Boston">
-          <!-- museum.jpg -->
+          <img src="museum.jpg" alt="Public talk at the Museum of Science, Boston">
         </div>
         <h3>Museum of Science, Boston</h3>
         <p>
-          A public talk on the role and organization of microtubule in living neurons
+          A public talk on the role and organisation of microtubules in living neurons.
         </p>
       </div>
 
       <div class="out-card">
-        <div class="out-fig">
-          <img src="video-still.jpg" alt="Still from the university instagram research video">
-          <!-- video-still.jpg -->
-        </div>
+        <a class="out-link" href="https://www.instagram.com/reel/DdpgCzviqn5/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener">
+          <div class="out-fig" data-cue="Watch the reel →">
+            <img src="video-still.jpg" alt="Still from the Northeastern research video">
+          </div>
+        </a>
         <h3>Research video</h3>
         <p>
           Northeastern produced a short film on the work in the lab.
-          <a href="https://www.instagram.com/reel/DdpgCzviqn5/?utm_source=ig_web_button_share_sheet">Watch it →</a>
+          <a href="https://www.instagram.com/reel/DdpgCzviqn5/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener">Watch it →</a>
         </p>
       </div>
 
       <div class="out-card">
-  <div class="out-fig">
-    <img src="ramifie.png" alt="Branched flow pattern photographed in the laboratory">
-  </div>
-  <h3>Press · <em>La Recherche</em></h3>
-  <p>
-    Coverage of our work on branched flow patterns.
-    <a href="https://www.larecherche.fr/le-myst%C3%A8re-des-%C3%A9coulements-ramifi%C3%A9s">Le mystère des écoulements ramifiés →</a>
-  </p>
-</div>
+        <a class="out-link" href="https://www.larecherche.fr/le-myst%C3%A8re-des-%C3%A9coulements-ramifi%C3%A9s" target="_blank" rel="noopener">
+          <div class="out-fig" data-cue="Read the article →">
+            <img src="ramifie.png" alt="Branched flow pattern photographed in the laboratory">
+          </div>
+        </a>
+        <h3>Press · <em>La Recherche</em></h3>
+        <p>
+          Coverage of our work on branched flow patterns.
+          <a href="https://www.larecherche.fr/le-myst%C3%A8re-des-%C3%A9coulements-ramifi%C3%A9s" target="_blank" rel="noopener">Le mystère des écoulements ramifiés →</a>
+        </p>
+      </div>
 
     </div>
   </section>
@@ -505,8 +606,8 @@ footer{
     <hr class="rule">
     <div class="contact-grid reveal">
       <div><span>Email</span> <a href="mailto:l.thorens@northeastern.edu">l.thorens@northeastern.edu</a></div>
-      <div><span>Scholar</span> <a href="https://scholar.google.com/citations?user=1SMFXOMAAAAJ&hl=en">Google Scholar</a></div>
-      <div><span>GitHub</span> <a href="https://github.com/louisonthorens?tab=repositories">GitHub</a></div>
+      <div><span>Scholar</span> <a href="https://scholar.google.com/citations?user=1SMFXOMAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></div>
+      <div><span>GitHub</span> <a href="https://github.com/louisonthorens?tab=repositories" target="_blank" rel="noopener">GitHub</a></div>
       <div><span>Address</span> Department of Physics, Northeastern University, Boston, MA</div>
     </div>
   </section>
