@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Louison Thorens</title>
+<meta name="description" content="Louison Thorens — soft matter and biophysics: cytoskeleton mechanics, granular media, porous media flow.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#FFFFFF; --surface:#FAFAF8; --surface-2:#F4F2EC; --rule:#E4E2DC;
+  --ink:#1A1D21; --ink-soft:#55595F; --ink-faint:#8A8F96;
+  --accent:#1F3A5F; --accent-2:#2E8B86; --warm:#C2452D;
+  --grain:#D9D2C5; --leaf:#7FA860; --water:#7FB5D6;
+  --shadow: 0 1px 2px rgba(26,29,33,.04), 0 8px 24px rgba(26,29,33,.06);
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#131619; --surface:#1A1E22; --surface-2:#20252A; --rule:#2B3136;
+    --ink:#E9E7E2; --ink-soft:#A8ADB4; --ink-faint:#757B82;
+    --accent:#93B7DD; --accent-2:#6CC2BB; --warm:#E58368;
+    --grain:#4A443A; --leaf:#9CC47E; --water:#5A8BA8;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131619; --surface:#1A1E22; --surface-2:#20252A; --rule:#2B3136;
+  --ink:#E9E7E2; --ink-soft:#A8ADB4; --ink-faint:#757B82;
+  --accent:#93B7DD; --accent-2:#6CC2BB; --warm:#E58368;
+  --grain:#4A443A; --leaf:#9CC47E; --water:#5A8BA8;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+}
+
+html{ scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px); scroll-behavior:smooth; }
+*,*::before,*::after{ box-sizing:inherit; }
+img{ max-width:100%; display:block; }
+
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:16.5px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  transition: background-color .3s ease, color .3s ease;
+}
+body::before{
+  content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px);
+  background:var(--bg); z-index:30;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: saturate(170%) blur(14px);
+  -webkit-backdrop-filter: saturate(170%) blur(14px);
+  border-bottom:1px solid var(--rule);
+}
+.nav-in{
+  max-width:880px; margin:0 auto; padding:14px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:18px;
+}
+.nav-name{ font-family:var(--serif); font-size:17px; font-weight:600; letter-spacing:.01em; }
+.nav-right{ display:flex; align-items:center; gap:20px; }
+.nav-links{ display:flex; gap:20px; font-size:14px; }
+nav a{
+  color:var(--ink-soft); text-decoration:none; position:relative; padding-bottom:2px;
+}
+nav a::after{
+  content:""; position:absolute; left:0; bottom:0; width:100%; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:right;
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+}
+nav a:hover{ color:var(--accent); }
+nav a:hover::after{ transform:scaleX(1); transform-origin:left; }
+
+.toggle{
+  width:30px; height:30px; border:1px solid var(--rule); border-radius:50%;
+  background:transparent; color:var(--ink-soft); cursor:pointer;
+  display:grid; place-items:center; padding:0; font-size:13px; line-height:1;
+  transition: border-color .25s, color .25s, transform .25s;
+}
+.toggle:hover{ border-color:var(--accent); color:var(--accent); transform:rotate(25deg); }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+main{ max-width:880px; margin:0 auto; padding:0 24px 104px; position:relative; }
+section{ padding-top:60px; position:relative; z-index:1; }
+
+h1{
+  font-family:var(--serif); font-weight:700; font-size:clamp(32px,6.4vw,46px);
+  line-height:1.12; letter-spacing:-.022em; margin:0 0 8px;
+}
+.subtitle{ color:var(--ink-soft); font-size:15.5px; margin:0 0 24px; line-height:1.5; }
+
+h2{
+  font-family:var(--serif); font-weight:600; font-size:24px; letter-spacing:-.012em;
+  margin:0 0 6px; color:var(--accent); display:flex; align-items:center; gap:11px;
+}
+h2::before{
+  content:""; width:18px; height:2px; background:var(--accent-2); flex:none; border-radius:1px;
+}
+.rule{ height:1px; background:var(--rule); border:0; margin:12px 0 30px; }
+h3{ font-family:var(--sans); font-weight:600; font-size:16.5px; margin:0 0 7px; letter-spacing:-.005em; }
+p{ margin:0 0 16px; }
+
+a{ color:var(--accent); text-underline-offset:2px; text-decoration-thickness:1px; }
+.lede{
+  font-family:var(--serif); font-size:20px; line-height:1.58; letter-spacing:-.005em;
+  margin-bottom:18px;
+}
+
+/* ---------- hero ---------- */
+.hero{
+  display:grid; grid-template-columns:1fr 196px; gap:40px; align-items:start;
+  padding:64px 0 8px; position:relative; z-index:1;
+}
+.portrait{
+  width:250px; aspect-ratio:4/5; border-radius:4px;
+  background:var(--surface); border:1px solid var(--rule);
+  display:grid; place-items:center;
+  color:var(--ink-faint); font-size:12.5px; text-align:center; padding:12px;
+  overflow:hidden; box-shadow:var(--shadow);
+  transition: transform .4s cubic-bezier(.4,0,.2,1), box-shadow .4s;
+}
+.portrait:hover{ transform:translateY(-3px); box-shadow:0 2px 4px rgba(0,0,0,.05), 0 14px 36px rgba(26,29,33,.10); }
+.portrait img{ width:100%; height:100%; object-fit:cover; }
+@media (max-width:660px){
+  .hero{ grid-template-columns:1fr; gap:24px; padding-top:48px; }
+  .portrait{ width:200px; }
+}
+
+/* ---------- projects ---------- */
+.project{
+  display:grid; grid-template-columns:316px 1fr; gap:30px;
+  padding:30px 0; border-top:1px solid var(--rule);
+}
+.project:first-of-type{ border-top:0; padding-top:6px; }
+
+.fig{
+  position:relative; background:var(--surface); border:1px solid var(--rule);
+  border-radius:4px; aspect-ratio:4/3; display:grid; place-items:center;
+  color:var(--ink-faint); font-size:12.5px; text-align:center; padding:14px;
+  overflow:hidden;
+  transition: transform .4s cubic-bezier(.4,0,.2,1), box-shadow .4s, border-color .3s;
+}
+/* faint dot-grid so empty placeholders still read as "grains" */
+.fig::before{
+  content:""; position:absolute; inset:0;
+  background-image: radial-gradient(circle, var(--rule) 1.2px, transparent 1.2px);
+  background-size: 15px 15px; opacity:.6; pointer-events:none;
+}
+.fig img{ position:relative; width:100%; height:100%; object-fit:cover; z-index:1; }
+.project:hover .fig{
+  transform:translateY(-3px); border-color:var(--accent-2);
+  box-shadow:0 2px 4px rgba(0,0,0,.04), 0 14px 32px rgba(26,29,33,.09);
+}
+
+.project-body p{ color:var(--ink-soft); font-size:15.5px; margin:0 0 11px; }
+.project-body p strong{ color:var(--ink); font-weight:500; }
+.kicker{
+  font-size:11px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--ink-faint); margin:0 0 6px !important; font-weight:600;
+}
+.project-links{ font-size:14px; display:flex; gap:8px; flex-wrap:wrap; }
+.pill{
+  display:inline-block; padding:3px 11px; border:1px solid var(--rule);
+  border-radius:100px; text-decoration:none; color:var(--ink-soft); font-size:13px;
+  transition: border-color .25s, color .25s, background-color .25s;
+}
+.pill:hover{ border-color:var(--accent); color:var(--accent); background:var(--surface); }
+@media (max-width:660px){ .project{ grid-template-columns:1fr; gap:18px; } }
+
+/* ---------- publications ---------- */
+ol.pubs{ list-style:none; padding:0; margin:0; counter-reset:pub; }
+ol.pubs li{
+  position:relative; padding:14px 0 14px 38px; margin:0;
+  border-bottom:1px solid var(--rule);
+  transition: background-color .25s;
+}
+ol.pubs li:last-child{ border-bottom:0; }
+ol.pubs li:hover{ background:var(--surface); }
+ol.pubs li::before{
+  counter-increment:pub; content:counter(pub);
+  position:absolute; left:4px; top:16px; font-size:12.5px;
+  font-variant-numeric:tabular-nums; color:var(--ink-faint); font-weight:600;
+}
+.pub-title{ font-weight:500; display:block; margin-bottom:4px; letter-spacing:-.005em; }
+.pub-authors{ font-size:14.5px; color:var(--ink-soft); display:block; }
+.pub-authors b{ color:var(--ink); font-weight:600; }
+.pub-venue{ font-size:14.5px; color:var(--ink-soft); display:block; margin-top:2px; }
+.tag{
+  display:inline-block; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+  padding:2px 8px; border-radius:100px; font-weight:600;
+  background:var(--surface-2); color:var(--ink-faint);
+  margin-left:7px; vertical-align:2px;
+}
+.pub-links{ font-size:14px; margin-top:7px; display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ---------- contact ---------- */
+.contact-grid{ display:grid; gap:8px; font-size:15.5px; }
+.contact-grid > div{ display:flex; gap:4px; flex-wrap:wrap; }
+.contact-grid span{ color:var(--ink-faint); display:inline-block; min-width:80px; }
+
+footer{
+  max-width:880px; margin:0 auto;
+  padding:30px 24px calc(30px + env(safe-area-inset-bottom,0px));
+  border-top:1px solid var(--rule); color:var(--ink-faint); font-size:13.5px;
+}
+
+/* ---------- outreach ---------- */
+.outreach-lede{ color:var(--ink-soft); font-size:16px; max-width:62ch; }
+.out-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:26px;
+}
+.out-card h3{ margin:14px 0 6px; }
+.out-card p{ color:var(--ink-soft); font-size:14.5px; margin:0; }
+.out-fig{
+  position:relative; background:var(--surface); border:1px solid var(--rule);
+  border-radius:4px; aspect-ratio:4/3; display:grid; place-items:center;
+  color:var(--ink-faint); font-size:12px; text-align:center; padding:12px;
+  overflow:hidden;
+  transition: transform .4s cubic-bezier(.4,0,.2,1), border-color .3s, box-shadow .4s;
+}
+.out-fig::before{
+  content:""; position:absolute; inset:0;
+  background-image: radial-gradient(circle, var(--rule) 1.2px, transparent 1.2px);
+  background-size:14px 14px; opacity:.55; pointer-events:none;
+}
+.out-fig img{ position:relative; width:100%; height:100%; object-fit:cover; z-index:1; }
+.out-card:hover .out-fig{
+  transform:translateY(-3px); border-color:var(--warm);
+  box-shadow:0 2px 4px rgba(0,0,0,.04), 0 12px 28px rgba(26,29,33,.09);
+}
+@media (max-width:760px){ .out-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:520px){ .out-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   SCROLL REVEAL  (content is visible by default; only animates
+   when JS has added .js to <html>)
+   ============================================================ */
+.js .reveal{ opacity:0; transform:translateY(14px); }
+.js .reveal.in{
+  opacity:1; transform:none;
+  transition: opacity .6s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1);
+}
+@media (prefers-reduced-motion: reduce){
+  .js .reveal{ opacity:1; transform:none; }
+}
+
+@media (max-width:560px){
+  main{ padding:0 20px 80px; }
+  .nav-links{ gap:15px; font-size:13.5px; }
+  .nav-right{ gap:14px; }
+  .lede{ font-size:18.5px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <span class="nav-name">Louison Thorens</span>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#publications">Publications</a>
+        <a href="#outreach">Outreach</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="toggle" id="themeToggle" aria-label="Toggle colour theme">◐</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <div class="hero-wrap">
+    <div class="hero">
+      <div>
+        <h1>Louison Thorens</h1>
+        <p class="subtitle">
+          Postdoctoral researcher · Liao Lab, Department of Physics and Institute for
+          Mechanobiology, Northeastern University
+        </p>
+        <p class="lede">
+          I am an experimental soft matter and biophysicist working on cytoskeleton mechanics, neuron branching, complex fluid, granular media, flow in
+          porous media.
+        </p>
+        <p>
+          My work resolves individual elements — grain contacts, single molecules, single
+          filaments — in systems usually described by averages, and asks what the average
+          leaves out. Across granular columns, polymer solutions and neuronal arbours, the
+          answer has repeatedly involved history and anisotropy.
+        </p>
+      </div>
+      <div class="portrait">
+        <img src="portrait.png " alt="Louison Thorens">
+        <!-- portrait.jpg -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================== -->
+  <section id="work">
+    <h2>Work</h2>
+    <hr class="rule">
+
+    <div class="project reveal">
+      <div class="fig">
+        <!-- <img src="microtubules.jpg" alt="Microtubules in a Drosophila sensory neuron"> -->
+        microtubules.jpg
+      </div>
+      <div class="project-body">
+        <p class="kicker">Mechanobiology · Current position, Northeastern</p>
+        <h3>Cell geometry shapes the cytoskeleton</h3>
+        <p>
+          Using live imaging, deep-learning analysis and genetics in <em>Drosophila</em>
+          sensory neurons, I showed that microtubule length and density follow local branch
+          geometry. The textbook expectation is that the cytoskeleton shapes the cell;
+          <strong>on short timescales, the cell shapes the cytoskeleton.</strong>
+        </p>
+        <div class="project-links">
+          <a class="pill" href="https://doi.org/10.64898/2026.09.28.755114">Preprint</a>
+        </div>
+      </div>
+    </div>
+<div class="project reveal">
+      <div class="fig">
+        <!-- <img src="dna.jpg" alt="Single DNA molecule in a microfluidic cross-slot"> -->
+        dna.jpg
+      </div>
+      <div class="project-body">
+        <p class="kicker">Complex fluids · Postdoc, Tufts University</p>
+        <h3>Single-molecule conformation in viscoelastic flow</h3>
+        <p>
+          Bulk constitutive models predict viscoelastic flows poorly because they average
+          over molecular conformation. Rather than infer it, I measured it — designing
+          microfluidic devices to track individual DNA molecules at high resolution.
+          <strong>Each molecule’s deformation history, rather than the flow it currently
+          occupies, governs the response.</strong>
+        </p>
+        <div class="project-links">
+          <a class="pill" href="https://arxiv.org/abs/2609.04538">Preprint</a>
+        </div>
+      </div>
+    </div>
+<div class="project reveal">
+      <div class="fig">
+        <!-- <img src="bulldozing.jpg" alt="Capillary bulldozing in a tube"> -->
+        bulldozing.jpg
+      </div>
+      <div class="project-body">
+        <p class="kicker">Porous media flow · PhD</p>
+        <h3>Capillary bulldozing during slow drainage</h3>
+        <p>
+          When a liquid–air interface recedes through an immersed granular bed, it
+          reorganises the grains ahead of it, producing dunes and plugs.
+          <strong>I characterised this instability and identified the competition between
+          inter-grain friction and surface tension that sets its onset.</strong>
+        </p>
+        <div class="project-links">
+          <a class="pill" href="https://doi.org/10.1039/d3sm00717k">Soft Matter 2023</a>
+        </div>
+      </div>
+    </div>
+<div class="project reveal">
+      <div class="fig">
+        <!-- <img src="janssen.jpg" alt="Magnetic Janssen effect experiment"> -->
+        janssen.jpg
+      </div>
+      <div class="project-body">
+        <p class="kicker">Granular matter · PhD, ENS Lyon &amp; PoreLab</p>
+        <h3>Controlling force transmission in granular columns</h3>
+        <p>
+          Grains in a container do not behave like a liquid: wall friction diverts the
+          weight sideways and the apparent mass saturates. <strong>I showed that this
+          redistribution can be controlled from outside</strong>, using ferromagnetic grains
+          in an applied field to generate a radial wall force whose magnitude and sign are
+          set by the field — tuning a column’s apparent mass continuously, with experiment,
+          theory and discrete element simulation agreeing with no adjustable parameters.
+        </p>
+        <div class="project-links">
+          <a class="pill" href="https://doi.org/10.1038/s41467-021-22722-y">Nat. Commun. 2021</a>
+          <a class="pill" href="https://doi.org/10.1039/d6sm00069j">Soft Matter 2026</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- =========================================================== -->
+  <section id="publications">
+    <h2>Publications</h2>
+    <hr class="rule">
+
+    <ol class="pubs reveal">
+      <li>
+        <span class="pub-title">Hybrid magnetic Janssen effect arising from percolating
+          ferromagnetic grain networks</span>
+        <span class="pub-authors"><b>L. Thorens</b>, S. Rodriguez, N. Taberlet, M. Bourgoin,
+          K. J. Måløy, S. Santucci</span>
+        <span class="pub-venue"><em>Soft Matter</em> <b>22</b>, 4463–4469 (2026)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1039/d6sm00069j">DOI</a></div>
+      </li>
+      <li>
+        <span class="pub-title">Cell morphology constrains microtubule dynamics in branched
+          sensory neurons <span class="tag">In revision · PNAS</span></span>
+        <span class="pub-authors"><b>L. Thorens</b> et al.</span>
+        <span class="pub-venue"><em>bioRxiv</em> (2026)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.64898/2026.09.28.755114">Preprint</a></div>
+      </li>
+      <li>
+        <span class="pub-title">Lagrangian conformational dynamics of individual DNA
+          molecules in microfluidic viscoelastic flows <span class="tag">Submitted</span></span>
+        <span class="pub-authors"><b>L. Thorens</b> et al.</span>
+        <span class="pub-venue"><em>arXiv</em>:2609.04538 (2026)</span>
+        <div class="pub-links"><a class="pill" href="https://arxiv.org/abs/2609.04538">Preprint</a></div>
+      </li>
+      <li>
+        <span class="pub-title">Capillary washboarding during slow drainage of a frictional
+          fluid</span>
+        <span class="pub-authors"><b>L. Thorens</b>, K. J. Måløy, E. G. Flekkøy, B. Sandnes,
+          M. Bourgoin, S. Santucci</span>
+        <span class="pub-venue"><em>Soft Matter</em> <b>19</b>, 9369–9378 (2023)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1039/d3sm00717k">DOI</a></div>
+      </li>
+      <li>
+        <span class="pub-title">Magnetic Janssen effect</span>
+        <span class="pub-authors"><b>L. Thorens</b>, K. J. Måløy, M. Bourgoin, S. Santucci</span>
+        <span class="pub-venue"><em>Nature Communications</em> <b>12</b> (2021)</span>
+        <div class="pub-links"><a class="pill" href="https://doi.org/10.1038/s41467-021-22722-y">DOI</a></div>
+      </li>
+
+      <!-- TODO: Science co-authorship, and the two Powders & Grains proceedings papers. -->
+
+    </ol>
+  </section>
+
+  <!-- =========================================================== -->
+  <section id="outreach">
+    <h2>Outreach</h2>
+    <hr class="rule">
+
+    <!-- <p class="outreach-lede">
+      Granular matter is unusually easy to show and unusually hard to explain, which makes
+      it good material for a general audience. I talk about it whenever I get the chance.
+    </p> -->
+
+    <div class="out-grid reveal">
+
+      <div class="out-card">
+        <div class="out-fig">
+          <img src="museum.jpg" alt="Talk at the Museum of Science, Boston">
+          <!-- museum.jpg -->
+        </div>
+        <h3>Museum of Science, Boston</h3>
+        <p>
+          A public talk on the role and organization of microtubule in living neurons
+        </p>
+      </div>
+
+      <div class="out-card">
+        <div class="out-fig">
+          <img src="video-still.jpg" alt="Still from the university instagram research video">
+          <!-- video-still.jpg -->
+        </div>
+        <h3>Research video</h3>
+        <p>
+          Northeastern produced a short film on the work in the lab.
+          <a href="https://www.instagram.com/reel/DdpgCzviqn5/?utm_source=ig_web_button_share_sheet">Watch it →</a>
+        </p>
+      </div>
+
+      <div class="out-card">
+  <div class="out-fig">
+    <img src="ramifie.png" alt="Branched flow pattern photographed in the laboratory">
+  </div>
+  <h3>Press · <em>La Recherche</em></h3>
+  <p>
+    Coverage of our work on branched flow patterns.
+    <a href="https://www.larecherche.fr/le-myst%C3%A8re-des-%C3%A9coulements-ramifi%C3%A9s">Le mystère des écoulements ramifiés →</a>
+  </p>
+</div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================== -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <hr class="rule">
+    <div class="contact-grid reveal">
+      <div><span>Email</span> <a href="mailto:l.thorens@northeastern.edu">l.thorens@northeastern.edu</a></div>
+      <div><span>Scholar</span> <a href="https://scholar.google.com/citations?user=1SMFXOMAAAAJ&hl=en">Google Scholar</a></div>
+      <div><span>GitHub</span> <a href="https://github.com/louisonthorens?tab=repositories">GitHub</a></div>
+      <div><span>Address</span> Department of Physics, Northeastern University, Boston, MA</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>© 2026 Louison Thorens</footer>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+
+  /* ---- theme toggle, remembered per visitor ---- */
+  var root = document.documentElement, btn = document.getElementById('themeToggle');
+  try{
+    var saved = localStorage.getItem('theme');
+    if(saved === 'dark' || saved === 'light') root.setAttribute('data-theme', saved);
+  }catch(e){}
+  if(btn){
+    btn.addEventListener('click', function(){
+      var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var cur = root.getAttribute('data-theme') || (sysDark ? 'dark' : 'light');
+      var next = cur === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try{ localStorage.setItem('theme', next); }catch(e){}
+    });
+  }
+
+  /* ---- scroll reveal ---- */
+  var items = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    items.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+  items.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
